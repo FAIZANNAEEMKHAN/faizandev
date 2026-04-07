@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Portal | Content Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@300..700,0..1&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#a3a6ff', secondary: '#53ddfc', surface: '#0e0e0e', 'surface-container': '#1a1a1a'
+            },
+            fontFamily: {
+                headline: ['Manrope', 'sans-serif'],
+                body: ['Inter', 'sans-serif'],
+                label: ['Space Grotesk', 'sans-serif']
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      .glass-panel { background: rgba(26, 26, 26, 0.6); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.05); }
+      .glass-card::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+          background-size: 100% 4px;
+          pointer-events: none;
+          opacity: 0.3;
+          z-index: 10;
+      }
+      .animated-gradient {
+          background: linear-gradient(270deg, #a3a6ff, #53ddfc, #a3a6ff, #ff9dd1);
+          background-size: 800% 800%;
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: gradient-shift 12s ease infinite;
+      }
+      @keyframes gradient-shift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+      }
+      .fade-in-up {
+          animation: fade-in-up 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+          opacity: 0;
+      }
+      @keyframes fade-in-up {
+          0% { opacity: 0; transform: translateY(30px); }
+          100% { opacity: 1; transform: translateY(0); }
+      }
+      .hover-lift {
+          transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+      }
+      .hover-lift:hover {
+          transform: translateY(-8px) scale(1.01);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      }
+    </style>
+</head>
+<body class="bg-surface text-white font-body min-h-screen selection:bg-primary/30 p-6 md:p-10 relative overflow-x-hidden">
+
+<div class="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[150px] -z-10"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[150px] -z-10"></div>
+
+<div class="max-w-4xl mx-auto flex justify-between items-center mb-12">
+    <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary">terminal</span>
+        <span class="font-headline font-extrabold text-primary tracking-tighter text-xl">Digital Web Developer</span>
+    </div>
+    <a href="index.html" class="font-label text-xs uppercase tracking-widest text-outline hover:text-white transition-colors flex items-center gap-2">
+        Exit Portal <span class="material-symbols-outlined text-sm">logout</span>
+    </a>
+</div>
+
+<div id="login-view" class="max-w-md mx-auto mt-20 glass-panel p-10 rounded-[2.5rem] shadow-2xl glass-card fade-in-up">
+    <div class="text-center mb-8">
+        <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-primary/20">
+            <span class="material-symbols-outlined text-primary text-3xl">admin_panel_settings</span>
+        </div>
+        <h1 class="text-3xl font-headline font-bold mb-2 text-white">Admin Access</h1>
+        <p class="text-gray-400 text-sm font-label uppercase tracking-widest text-[10px]">Authorised Personnel Only</p>
+    </div>
+
+    <input type="password" id="admin-pass" value="faizan" class="w-full bg-[#0e0e0e] border border-white/10 rounded-2xl p-4 text-white mb-6 outline-none focus:border-primary focus:shadow-[0_0_15px_rgba(163,166,255,0.1)] transition-all font-mono" placeholder="Enter authentication token">
+    <button onclick="login()" class="w-full bg-gradient-to-br from-primary to-[#7a7eff] text-black font-headline font-bold py-4 rounded-2xl hover:shadow-[0_0_20px_rgba(163,166,255,0.4)] active:scale-[0.98] transition-all flex justify-center items-center gap-2">
+        <span>Authenticate</span>
+        <span class="material-symbols-outlined text-xl">login</span>
+    </button>
+    <p id="login-err" class="text-error text-center mt-4 font-label text-xs"></p>
+</div>
+
+<div id="editor-view" class="max-w-4xl mx-auto hidden">
+    <div class="flex flex-col md:flex-row justify-between md:items-end mb-10 border-b border-white/10 pb-6 gap-4">
+        <div>
+            <h1 class="text-4xl font-headline font-bold mb-2 fade-in-up" style="animation-delay: 0.1s;">
+              <span class="animated-gradient">CMS Visual Editor</span>
+            </h1>
+            <p class="text-gray-400 font-body text-sm fade-in-up" style="animation-delay: 0.2s;">Manage your interactive web content effortlessly.</p>
+        </div>
+        <button onclick="saveContent()" class="bg-secondary text-black font-headline font-bold px-8 py-3 rounded-xl hover:shadow-[0_0_20px_rgba(83,221,252,0.4)] active:scale-95 transition-all flex items-center gap-2 hover-lift fade-in-up" style="animation-delay: 0.3s;">
+            <span class="material-symbols-outlined text-lg">save</span> Save Changes
+        </button>
+    </div>
+    
+    <div id="editor-fields" class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-24">
+        <!-- Injected via JS -->
+    </div>
+</div>
+
+<script>
+    let token = localStorage.getItem('admin_token');
+    let contentMap = {};
+
+    if (token) { showEditor(); }
+
+    async function login() {
+        const pass = document.getElementById('admin-pass').value;
+        const isLocal = window.location.protocol === 'file:';
+
+        try {
+            if (isLocal && pass.toLowerCase() === 'faizan') {
+                token = 'local-admin-mock';
+                localStorage.setItem('admin_token', token);
+                showEditor();
+                return;
+            }
+
+            const res = await fetch('/api/admin/login', {
+                method: 'POST', headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({password: pass})
+            });
+            const data = await res.json();
+            if (data.status === 'success') {
+                token = data.token;
+                localStorage.setItem('admin_token', token);
+                showEditor();
+            } else {
+                document.getElementById('login-err').innerText = data.message || "Invalid credentials";
+            }
+        } catch(e) {
+            // Provide context if it's struggling
+            if (isLocal) {
+               if (pass.toLowerCase() !== 'faizan') document.getElementById('login-err').innerText = "Invalid credentials";
+            } else {
+               document.getElementById('login-err').innerText = "Server connection failed. Run start.bat";
+            }
+        }
+    }
+
+    async function showEditor() {
+        document.getElementById('login-view').classList.add('hidden');
+        document.getElementById('editor-view').classList.remove('hidden');
+        
+        try {
+            const isLocal = window.location.protocol === 'file:';
+            let res;
+            if (isLocal) {
+                res = await fetch('content.json');
+            } else {
+                res = await fetch('/api/admin/content');
+            }
+            
+            contentMap = await res.json();
+            renderGUI();
+        } catch(e) {
+            console.error("Failed to load CMS fields", e);
+            document.getElementById('editor-fields').innerHTML = '<p class="text-error">Unable to fetch content. Make sure server is running.</p>';
+        }
+    }
+
+    function renderGUI() {
+        const container = document.getElementById('editor-fields');
+        container.innerHTML = '';
+
+        // General settings Group
+        let generalHTML = `<div class="md:col-span-2 glass-panel p-6 rounded-2xl mb-2 glass-card fade-in-up" style="animation-delay: 0.4s;">
+            <h2 class="text-xl font-headline font-bold mb-6 text-primary flex items-center gap-2"><span class="material-symbols-outlined">edit_document</span> General Content</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">`;
+        
+        Object.keys(contentMap).forEach(key => {
+            if (key !== 'projects') {
+                generalHTML += `
+                    <div>
+                        <label class="font-label text-gray-400 uppercase text-[10px] tracking-widest mb-2 block">${key.replace(/_/g, ' ')}</label>
+                        <textarea oninput="contentMap['${key}'] = this.value" class="w-full bg-[#0e0e0e] border border-white/10 rounded-xl p-3 text-white outline-none focus:border-primary/50 transition-all font-body text-sm min-h-[60px] resize-y">${contentMap[key]}</textarea>
+                    </div>
+                `;
+            }
+        });
+        generalHTML += `</div></div>`;
+        container.innerHTML += generalHTML;
+
+        // Projects Group
+        let projectsHTML = `<div class="md:col-span-2 glass-panel p-6 rounded-2xl glass-card fade-in-up" style="animation-delay: 0.5s;">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-headline font-bold text-secondary flex items-center gap-2"><span class="material-symbols-outlined">view_cozy</span> Projects Portfolio</h2> 
+                <button onclick="addProject()" class="text-xs font-label uppercase tracking-widest bg-secondary/20 text-secondary px-4 py-2 rounded-lg hover:bg-secondary/40 transition-all hover-lift">+ Add Project</button>
+            </div>
+            <div class="space-y-6">`;
+
+        if(contentMap.projects && Array.isArray(contentMap.projects)) {
+            contentMap.projects.forEach((proj, idx) => {
+                projectsHTML += `
+                    <div class="p-6 border border-white/5 rounded-2xl bg-[#0a0a0a] relative group shadow-inner">
+                        <button onclick="removeProject(${idx})" class="absolute top-4 right-4 text-gray-600 hover:text-red-500 transition-colors p-2 bg-black/50 rounded-lg"><span class="material-symbols-outlined text-base">delete</span></button>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                            <!-- Image Section -->
+                            <div class="md:col-span-1">
+                                <label class="font-label text-gray-500 uppercase text-[10px] tracking-widest mb-2 block">Cover Image</label>
+                                <div class="aspect-square bg-surface border border-white/5 rounded-xl overflow-hidden mb-3 relative group">
+                                    <img src="${proj.image}" onerror="this.src=''" class="w-full h-full object-cover transition-all group-hover:opacity-75">
+                                </div>
+                                <input type="text" value="${proj.image}" onchange="contentMap.projects[${idx}].image = this.value; renderGUI()" class="w-full bg-surface border border-white/10 rounded-lg p-3 text-xs text-white outline-none focus:border-secondary/50" placeholder="assets/image.png">
+                                <p class="text-[9px] text-gray-500 mt-1 pl-1">Press enter to update preview</p>
+                            </div>
+                            
+                            <!-- Content Section -->
+                            <div class="md:col-span-3 space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="font-label text-gray-500 uppercase text-[10px] tracking-widest mb-1 block">Project ID (URL key)</label>
+                                        <input type="text" value="${proj.id}" oninput="contentMap.projects[${idx}].id = this.value" class="w-full bg-surface border border-white/10 rounded-lg p-3 text-sm text-white outline-none focus:border-secondary/50 font-mono">
+                                    </div>
+                                    <div>
+                                        <label class="font-label text-gray-500 uppercase text-[10px] tracking-widest mb-1 block">Display Title</label>
+                                        <input type="text" value="${proj.title}" oninput="contentMap.projects[${idx}].title = this.value" class="w-full bg-surface border border-white/10 rounded-lg p-3 text-sm text-white outline-none focus:border-secondary/50 font-bold">
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <label class="font-label text-gray-500 uppercase text-[10px] tracking-widest mb-1 block">Short Description</label>
+                                    <textarea oninput="contentMap.projects[${idx}].description = this.value" class="w-full bg-surface border border-white/10 rounded-lg p-3 text-sm text-white outline-none focus:border-secondary/50 min-h-[80px]">${proj.description}</textarea>
+                                </div>
+
+                                <div>
+                                    <label class="font-label text-gray-500 uppercase text-[10px] tracking-widest mb-2 block">Technology Tags</label>
+                                    <div class="flex flex-wrap gap-2 items-center bg-surface p-2 rounded-xl border border-white/5">
+                                        ${(proj.tags || []).map((t, tIdx) => `
+                                            <span class="bg-secondary/10 text-secondary text-xs px-2.5 py-1.5 rounded-md border border-secondary/20 flex items-center gap-1 font-label">${t} <button onclick="removeTag(${idx}, ${tIdx})" class="hover:text-white transition-colors ml-1">&times;</button></span>
+                                        `).join('')}
+                                        <input type="text" onkeydown="if(event.key==='Enter') { addTag(${idx}, this.value); this.value=''; }" placeholder="+ add tag (press enter)" class="bg-transparent border-none rounded text-xs px-2 py-1 outline-none text-gray-400 focus:text-white w-32 font-label">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        projectsHTML += `</div></div>`;
+        container.innerHTML += projectsHTML;
+    }
+
+    function addProject() {
+        if(!contentMap.projects) contentMap.projects = [];
+        contentMap.projects.unshift({id: "new-startup", title: "New Project Showcase", description: "A high-fidelity project demonstration.", image: "assets/sample.png", tags: ["WEB"]});
+        renderGUI();
+    }
+
+    function removeProject(idx) {
+        if(confirm("Are you sure you want to permanently delete this project?")) {
+            contentMap.projects.splice(idx, 1);
+            renderGUI();
+        }
+    }
+
+    function addTag(pIdx, val) {
+        if(val.trim()) {
+            if(!contentMap.projects[pIdx].tags) contentMap.projects[pIdx].tags = [];
+            contentMap.projects[pIdx].tags.push(val.trim().toUpperCase());
+            renderGUI();
+        }
+    }
+
+    function removeTag(pIdx, tIdx) {
+        contentMap.projects[pIdx].tags.splice(tIdx, 1);
+        renderGUI();
+    }
+
+    async function saveContent() {
+        const isLocal = window.location.protocol === 'file:';
+        if (isLocal) {
+            alert("Notice: You are viewing an offline local file. To save changes to content.json permanently, please start the background server logic (run start.bat) and use localhost:3000.");
+            return;
+        }
+        
+        try {
+            const res = await fetch('/api/admin/content/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(contentMap)
+            });
+            
+            if (res.ok) {
+                alert("✓ Visual Content saved successfully! Changes are now live on your portfolio.");
+            } else {
+                alert("Session expired. Please log in again.");
+                localStorage.removeItem('admin_token');
+                window.location.reload();
+            }
+        } catch (e) {
+            alert("Error communicating with the server.");
+        }
+    }
+</script>
+</body>
+</html>

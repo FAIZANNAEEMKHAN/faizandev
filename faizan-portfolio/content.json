@@ -1,0 +1,38 @@
+{
+    "hero_title": "Building Modern \n<br/><span class=\"bg-gradient-to-br from-primary to-primary-dim bg-clip-text text-transparent\">Digital Experiences</span>",
+    "hero_subtitle": "A Web Developer of high-performance interfaces and scalable systems, crafting digital products with precision, purpose, and professional elegance.",
+    "about_bio_1": "With over 8 years in the digital space, my journey began at the intersection of logic and aesthetics. I don't just write code; I design systems that anticipate user needs while maintaining the rigorous standards of modern software architecture.",
+    "about_bio_2": "I believe the best interfaces are invisible\u2014they feel natural, responsive, and purposeful. My approach combines the structural power of TypeScript with the expressive fluidity of motion design.",
+    "contact_location": "Faisalabad, PK",
+    "contact_email": "faizanmaster2002@gmail.com",
+    "projects": [
+        {
+            "id": "ecommerce",
+            "title": "E-commerce App",
+            "description": "A high-performance luxury retail experience with seamless transitions and global state management.",
+            "image": "assets/ecommerce.png",
+            "tags": ["NEXT.JS", "STRIPE"]
+        },
+        {
+            "id": "analytics",
+            "title": "Social Media Dashboard",
+            "description": "Real-time engagement metrics for digital agencies with complex SVG animations.",
+            "image": "assets/analytics.png",
+            "tags": ["SVG", "CHARTS"]
+        },
+        {
+            "id": "taskmanager",
+            "title": "Neuro-Task Manager",
+            "description": "A minimalist productivity engine built with focus-state architecture.",
+            "image": "assets/taskmanager.png",
+            "tags": ["REACT", "FRAMER"]
+        },
+        {
+            "id": "3dengine",
+            "title": "3D Portfolio Engine",
+            "description": "An immersive web experience pushing the boundaries of browser-based rendering and interactive shaders.",
+            "image": "assets/3dengine.png",
+            "tags": ["THREE.JS", "WEBGL"]
+        }
+    ]
+}

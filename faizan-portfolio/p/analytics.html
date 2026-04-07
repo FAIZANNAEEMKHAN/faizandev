@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Social Media Analytics Dashboard — Faizan Khan</title>
+<meta name="description" content="Real-time engagement metrics for digital agencies. Built with D3.js, SVG animations, and live data storytelling."/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&family=Space_Grotesk:wght@400;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-tertiary-fixed": "#360024", "surface-variant": "#262626",
+          "on-error-container": "#ffb2b9", "on-primary-fixed": "#000000",
+          "surface-container-low": "#131313", "on-primary": "#0f00a4",
+          "error-dim": "#d73357", "error": "#ff6e84", "surface-container-high": "#20201f",
+          "surface-container-highest": "#262626", "on-secondary-container": "#ecfaff",
+          "primary-fixed-dim": "#8387ff", "on-error": "#490013", "on-tertiary": "#6c0f4d",
+          "primary": "#a3a6ff", "outline": "#767575", "inverse-on-surface": "#565555",
+          "inverse-primary": "#494bd7", "on-tertiary-container": "#5e0042",
+          "primary-dim": "#6063ee", "on-surface": "#ffffff", "tertiary-fixed": "#fd8bca",
+          "surface-container-lowest": "#000000", "tertiary-dim": "#eb7bba",
+          "tertiary-container": "#fa88c8", "primary-container": "#9396ff",
+          "surface": "#0e0e0e", "inverse-surface": "#fcf9f8", "surface-tint": "#a3a6ff",
+          "on-tertiary-fixed-variant": "#6d104e", "on-secondary-fixed-variant": "#005969",
+          "on-secondary": "#004b58", "tertiary": "#ff9dd1", "secondary-dim": "#40ceed",
+          "surface-bright": "#2c2c2c", "secondary-fixed-dim": "#48d4f3",
+          "on-background": "#ffffff", "on-surface-variant": "#adaaaa",
+          "on-primary-fixed-variant": "#0e009d", "outline-variant": "#484847",
+          "secondary-container": "#00687a", "surface-container": "#1a1a1a",
+          "on-secondary-fixed": "#003a45", "background": "#0e0e0e",
+          "error-container": "#a70138", "primary-fixed": "#9396ff",
+          "tertiary-fixed-dim": "#ee7ebc", "on-primary-container": "#0a0081",
+          "secondary": "#53ddfc", "surface-dim": "#0e0e0e", "secondary-fixed": "#65e1ff"
+        },
+        fontFamily: { "headline": ["Manrope"], "body": ["Inter"], "label": ["Space Grotesk"] },
+        borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+      },
+    },
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  .glass-card { background: rgba(26,26,26,0.7); backdrop-filter: blur(20px); }
+  .glass-panel { background: rgba(26,26,26,0.5); backdrop-filter: blur(16px); }
+  body { min-height: max(884px, 100dvh); }
+  @keyframes fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .animate-fade-in { animation: fade-in 0.6s ease forwards; }
+  .animate-fade-in-delay { animation: fade-in 0.6s ease 0.2s forwards; opacity: 0; }
+  .animate-fade-in-delay-2 { animation: fade-in 0.6s ease 0.4s forwards; opacity: 0; }
+  @keyframes grow-bar { from { height: 0; } to { height: var(--h); } }
+  .bar { animation: grow-bar 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; animation-delay: var(--delay, 0s); height: 0; }
+  @keyframes pulse-dot { 0%,100%{ opacity:1; transform:scale(1); } 50%{ opacity:0.5; transform:scale(1.5); } }
+  .live-dot { animation: pulse-dot 1.5s ease-in-out infinite; }
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30 selection:text-primary">
+
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#0e0e0e]/70 backdrop-blur-xl border-b border-white/5">
+<nav class="flex justify-between items-center px-6 py-4 w-full">
+  <div class="flex items-center gap-2">
+    <span class="material-symbols-outlined text-[#a3a6ff]">terminal</span>
+    <span class="font-headline font-extrabold text-[#a3a6ff] tracking-tighter text-xl">Digital Web Developer</span>
+  </div>
+  <div class="hidden md:flex items-center gap-8">
+<a class="font-label text-sm uppercase tracking-widest text-gray-400 hover:text-white transition-colors" href="../index.html">Home</a>
+<a class="font-label text-sm uppercase tracking-widest text-[#a3a6ff] transition-colors" href="../projects.html">Projects</a>
+<a class="font-label text-sm uppercase tracking-widest text-gray-400 hover:text-white transition-colors" href="../about.html">About</a>
+<a class="font-label text-sm uppercase tracking-widest text-gray-400 hover:text-white transition-colors" href="../contact.html">Contact</a>
+</div>
+  <div class="flex items-center gap-4">
+    <a href="../admin.html" class="font-label text-sm uppercase tracking-widest text-gray-400 hover:text-primary transition-colors">Admin Portal</a>
+    <button class="bg-surface-container-high px-6 py-2 rounded-lg font-label text-sm font-bold text-[#a3a6ff] hover:bg-[#1a1a1a] transition-colors duration-300">Let's Chat</button>
+  </div>
+</nav>
+</header>
+
+<main class="pt-32 pb-24 px-6 md:px-12">
+  <div class="max-w-5xl mx-auto">
+
+    <!-- Back Button -->
+    <a href="../projects.html" class="inline-flex items-center text-primary hover:gap-3 gap-2 transition-all mb-12 group font-label text-sm uppercase tracking-widest animate-fade-in">
+      <span class="material-symbols-outlined mr-1 group-hover:-translate-x-1 transition-transform">arrow_back</span>
+      Back to Projects
+    </a>
+
+    <!-- Hero -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center mb-24 animate-fade-in">
+      <div>
+        <span class="font-label text-xs text-secondary uppercase tracking-[0.2em] flex items-center gap-2 mb-4 fade-in-up" style="animation-delay: 0.1s;">
+          <span class="w-2 h-2 rounded-full bg-secondary live-dot"></span>
+          Live Data — Case Study
+        </span>
+        <h1 class="font-headline text-5xl md:text-7xl font-extrabold mb-6 leading-tight fade-in-up" style="animation-delay: 0.2s;">
+          Social <br/>
+          <span class="animated-gradient">Analytics</span>
+        </h1>
+        <p class="text-on-surface-variant text-xl leading-relaxed mb-8 fade-in-up" style="animation-delay: 0.3s;">
+          Real-time engagement metrics for digital agencies. Features complex D3.js visualizations, animated SVG charts, and interactive data storytelling with live WebSocket feeds.
+        </p>
+        <div class="flex flex-wrap gap-3 mb-10 fade-in-up" style="animation-delay: 0.4s;">
+          <span class="px-4 py-2 bg-secondary/10 text-secondary rounded-full text-sm font-label border border-secondary/20">D3.js</span>
+          <span class="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-label border border-primary/20">SVG Animations</span>
+          <span class="px-4 py-2 bg-surface-container-high text-on-surface-variant rounded-full text-sm font-label">WebSocket</span>
+          <span class="px-4 py-2 bg-surface-container-high text-on-surface-variant rounded-full text-sm font-label">Real-time</span>
+        </div>
+        <div class="flex gap-4 fade-in-up" style="animation-delay: 0.5s;">
+          <a href="#" class="bg-gradient-to-br from-secondary to-secondary-dim text-surface px-6 py-3 rounded-lg font-label font-bold text-sm hover:shadow-[0_0_20px_rgba(83,221,252,0.3)] transition-all active:scale-95 flex items-center gap-2 hover-lift">
+            <span class="material-symbols-outlined text-base">open_in_new</span> Live Demo
+          </a>
+          <a href="#" class="bg-surface-container-high text-on-surface px-6 py-3 rounded-lg font-label font-bold text-sm hover:bg-surface-bright transition-all active:scale-95 flex items-center gap-2 hover-lift">
+            <span class="material-symbols-outlined text-base">code</span> Source Code
+          </a>
+        </div>
+      </div>
+
+      <!-- Mock Analytics Chart UI -->
+      <div class="relative group fade-in-up" style="animation-delay: 0.6s;">
+        <div class="absolute inset-0 bg-secondary/10 rounded-[3rem] blur-[60px]"></div>
+        <div class="aspect-[4/5] rounded-[3rem] overflow-hidden glass-panel border border-outline-variant/20 shadow-2xl relative p-6 flex flex-col glass-card">
+          <!-- Header -->
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <p class="font-headline font-bold">Engagement Rate</p>
+              <p class="font-label text-xs text-secondary flex items-center gap-1">
+                <span class="live-dot w-1.5 h-1.5 rounded-full bg-secondary inline-block"></span> Live
+              </p>
+            </div>
+            <p class="font-headline text-2xl font-extrabold text-secondary">+24.7%</p>
+          </div>
+          <!-- Bar Chart Mock -->
+          <div class="flex-1 flex items-end gap-2 pb-4 border-b border-outline-variant/20">
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="bar w-full rounded-t-lg bg-primary/60" style="--h:45%; --delay:0.1s; height:0; min-height:0;"></div>
+              <span class="font-label text-[9px] text-on-surface-variant">MON</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="bar w-full rounded-t-lg bg-primary/70" style="--h:65%; --delay:0.2s; height:0;"></div>
+              <span class="font-label text-[9px] text-on-surface-variant">TUE</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="bar w-full rounded-t-lg bg-primary/80" style="--h:52%; --delay:0.3s; height:0;"></div>
+              <span class="font-label text-[9px] text-on-surface-variant">WED</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="bar w-full rounded-t-lg bg-secondary" style="--h:90%; --delay:0.4s; height:0;"></div>
+              <span class="font-label text-[9px] text-on-surface-variant">THU</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="bar w-full rounded-t-lg bg-primary/50" style="--h:70%; --delay:0.5s; height:0;"></div>
+              <span class="font-label text-[9px] text-on-surface-variant">FRI</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="bar w-full rounded-t-lg bg-tertiary/60" style="--h:38%; --delay:0.6s; height:0;"></div>
+              <span class="font-label text-[9px] text-on-surface-variant">SAT</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-1">
+              <div class="bar w-full rounded-t-lg bg-tertiary/40" style="--h:28%; --delay:0.7s; height:0;"></div>
+              <span class="font-label text-[9px] text-on-surface-variant">SUN</span>
+            </div>
+          </div>
+          <!-- Mini Stat Cards -->
+          <div class="grid grid-cols-3 gap-2 mt-4">
+            <div class="bg-surface-container-highest rounded-xl p-3 text-center">
+              <p class="font-headline text-lg font-bold text-primary">142K</p>
+              <p class="font-label text-[9px] text-on-surface-variant uppercase">Reach</p>
+            </div>
+            <div class="bg-surface-container-highest rounded-xl p-3 text-center">
+              <p class="font-headline text-lg font-bold text-secondary">8.4K</p>
+              <p class="font-label text-[9px] text-on-surface-variant uppercase">Clicks</p>
+            </div>
+            <div class="bg-surface-container-highest rounded-xl p-3 text-center">
+              <p class="font-headline text-lg font-bold text-tertiary">3.2%</p>
+              <p class="font-label text-[9px] text-on-surface-variant uppercase">CTR</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-24 fade-in-up" style="animation-delay: 0.7s;">
+      <div class="glass-card rounded-2xl p-6 text-center border border-outline-variant/10 hover-lift">
+        <p class="font-headline text-3xl font-extrabold text-secondary mb-1">15+</p>
+        <p class="font-label text-xs text-on-surface-variant uppercase tracking-wider">Chart Types</p>
+      </div>
+      <div class="glass-card rounded-2xl p-6 text-center border border-outline-variant/10 hover-lift">
+        <p class="font-headline text-3xl font-extrabold text-primary mb-1">&lt;50ms</p>
+        <p class="font-label text-xs text-on-surface-variant uppercase tracking-wider">Data Latency</p>
+      </div>
+      <div class="glass-card rounded-2xl p-6 text-center border border-outline-variant/10 hover-lift">
+        <p class="font-headline text-3xl font-extrabold text-tertiary mb-1">50+</p>
+        <p class="font-label text-xs text-on-surface-variant uppercase tracking-wider">Agencies</p>
+      </div>
+      <div class="glass-card rounded-2xl p-6 text-center border border-outline-variant/10 hover-lift">
+        <p class="font-headline text-3xl font-extrabold text-on-surface mb-1">5M+</p>
+        <p class="font-label text-xs text-on-surface-variant uppercase tracking-wider">Data Points</p>
+      </div>
+    </div>
+
+    <!-- Technical Features -->
+    <section class="bg-surface-container-low rounded-[3rem] p-12 mb-16 border border-outline-variant/10 animate-fade-in-delay-2">
+      <h2 class="font-headline text-3xl font-bold mb-2 text-secondary">Data Visualisation Engine</h2>
+      <p class="text-on-surface-variant mb-10 font-body">Built for clarity, speed, and rich interactivity.</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div class="space-y-4">
+          <div class="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary">
+            <span class="material-symbols-outlined">bar_chart</span>
+          </div>
+          <h3 class="font-headline text-xl font-bold">D3.js Charts</h3>
+          <p class="text-on-surface-variant leading-relaxed">Custom D3.js visualizations with smooth enter/update/exit transitions for live data storytelling.</p>
+        </div>
+        <div class="space-y-4">
+          <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined">bolt</span>
+          </div>
+          <h3 class="font-headline text-xl font-bold">WebSocket Feeds</h3>
+          <p class="text-on-surface-variant leading-relaxed">Real-time WebSocket connections stream live engagement data to the dashboard under 50ms.</p>
+        </div>
+        <div class="space-y-4">
+          <div class="w-12 h-12 rounded-2xl bg-surface-container-high flex items-center justify-center text-on-surface-variant">
+            <span class="material-symbols-outlined">filter_alt</span>
+          </div>
+          <h3 class="font-headline text-xl font-bold">Drill-Down Filters</h3>
+          <p class="text-on-surface-variant leading-relaxed">Multi-dimensional filtering across platforms, date ranges, and content types with URL state persistence.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- Mobile Bottom Nav -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#131313]/80 backdrop-blur-2xl z-50 rounded-t-2xl shadow-[0_-10px_40px_rgba(0,0,0,0.4)]">
+<a class="flex flex-col items-center justify-center text-gray-500 hover:text-white transition-all" href="../index.html">
+    <span class="material-symbols-outlined">home</span>
+    <span class="font-label text-[10px] uppercase tracking-widest mt-1">Home</span>
+  </a>
+<a class="flex flex-col items-center justify-center text-[#a3a6ff] bg-[#a3a6ff]/10 rounded-xl px-4 py-1 scale-110 transition-all" href="../projects.html">
+    <span class="material-symbols-outlined">grid_view</span>
+    <span class="font-label text-[10px] uppercase tracking-widest mt-1">Projects</span>
+  </a>
+<a class="flex flex-col items-center justify-center text-gray-500 hover:text-white transition-all" href="../about.html">
+    <span class="material-symbols-outlined">person</span>
+    <span class="font-label text-[10px] uppercase tracking-widest mt-1">About</span>
+  </a>
+<a class="flex flex-col items-center justify-center text-gray-500 hover:text-white transition-all" href="../contact.html">
+    <span class="material-symbols-outlined">chat_bubble</span>
+    <span class="font-label text-[10px] uppercase tracking-widest mt-1">Contact</span>
+  </a>
+</nav>
+
+<!-- Floating Chatbot -->
+<div class="fixed bottom-10 right-10 z-40 hidden md:block">
+  <a id="floating-chatbot" href="../contact.html" class="w-16 h-16 rounded-full bg-[#1a1a1a]/70 backdrop-blur-xl border border-white/10 flex items-center justify-center shadow-2xl hover:scale-110 transition-transform active:scale-95 group">
+    <span class="material-symbols-outlined text-[#53ddfc] text-3xl group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+  </a>
+</div>
+
+<script>
+  // Animate bars on load
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.bar').forEach(bar => {
+      const h = bar.style.getPropertyValue('--h');
+      setTimeout(() => { bar.style.height = h; }, 100);
+    });
+  });
+</script>
+<script src="../portfolio-logic.js?v=2"></script>
+</body>
+</html>

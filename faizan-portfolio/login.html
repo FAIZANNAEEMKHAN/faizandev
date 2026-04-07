@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Digital Web Developer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@700;800&family=Space+Grotesk:wght@500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#a3a6ff',
+              secondary: '#53ddfc',
+              surface: '#0e0e0e',
+              'surface-container': '#1a1a1a',
+              outline: '#484847'
+            },
+            fontFamily: {
+                headline: ['Manrope', 'sans-serif'],
+                body: ['Inter', 'sans-serif'],
+                label: ['Space Grotesk', 'sans-serif']
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      .glass-panel {
+        background: rgba(26, 26, 26, 0.6);
+        backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .input-field {
+        background: rgba(14, 14, 14, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+      }
+      .input-field:focus {
+        border-color: #a3a6ff;
+        box-shadow: 0 0 15px rgba(163, 166, 255, 0.1);
+      }
+    </style>
+</head>
+<body class="bg-surface text-white font-body min-h-screen selection:bg-primary/30 relative">
+
+<!-- Header Nav -->
+<header class="fixed top-0 w-full z-50 bg-[#0e0e0e]/70 backdrop-blur-xl border-b border-white/5">
+<nav class="flex justify-between items-center px-6 py-4">
+  <div class="flex items-center gap-2">
+    <span class="material-symbols-outlined text-[#a3a6ff]">terminal</span>
+    <a href="index.html" class="font-headline font-extrabold text-[#a3a6ff] tracking-tighter text-xl">Digital Web Developer</a>
+  </div>
+  <div class="hidden md:flex items-center gap-8">
+    <a class="font-label text-sm uppercase tracking-widest text-gray-400 hover:text-white transition-colors" href="index.html">Home</a>
+    <a class="font-label text-sm uppercase tracking-widest text-gray-400 hover:text-white transition-colors" href="about.html">About</a>
+<a class="font-label text-sm uppercase tracking-widest text-gray-400 hover:text-white transition-colors" href="projects.html">Projects</a>
+    <a class="font-label text-sm uppercase tracking-widest text-gray-400 hover:text-white transition-colors" href="contact.html">Contact</a>
+  </div>
+  <a href="admin.html" class="font-label text-sm uppercase tracking-widest text-[#a3a6ff] border border-primary/30 px-4 py-2 rounded-lg">Admin Portal</a>
+</nav>
+</header>
+
+<!-- Page Content -->
+<div class="min-h-screen flex items-center justify-center p-6 pt-28">
+    
+    <!-- Background Accents -->
+    <div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px]"></div>
+    <div class="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[120px]"></div>
+
+    <!-- Login Container -->
+    <main class="w-full max-w-md z-10">
+        <div class="glass-panel p-10 rounded-[2.5rem] shadow-2xl">
+            <!-- Header -->
+            <div class="text-center mb-10">
+                <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-primary/20">
+                    <span class="material-symbols-outlined text-primary text-3xl">lock_open</span>
+                </div>
+                <h1 class="font-headline text-3xl font-extrabold tracking-tight mb-2">Welcome Back</h1>
+                <p class="text-gray-400 text-sm">Enter your credentials to access your dashboard</p>
+            </div>
+
+            <!-- Form -->
+            <form id="login-form" class="space-y-6">
+                <div>
+                    <label class="block font-label text-[10px] uppercase tracking-widest text-gray-500 mb-2 ml-1">Email or Phone Number</label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-xl">alternate_email</span>
+                        <input type="text" id="login-identifier" required class="input-field w-full rounded-2xl py-4 pl-12 pr-4 outline-none text-white text-sm" placeholder="you@example.com">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-2 mx-1">
+                        <label class="font-label text-[10px] uppercase tracking-widest text-gray-500">Password</label>
+                        <a href="#" class="text-[10px] uppercase tracking-widest text-primary hover:underline">Forgot?</a>
+                    </div>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-xl">ios_share</span>
+                        <input type="password" id="login-password" required class="input-field w-full rounded-2xl py-4 pl-12 pr-4 outline-none text-white text-sm" placeholder="••••••••">
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 py-2">
+                    <input type="checkbox" id="remember" class="w-4 h-4 rounded border-outline bg-surface checked:bg-primary transition-all cursor-pointer">
+                    <label for="remember" class="text-xs text-gray-400 cursor-pointer">Stay signed in for 30 days</label>
+                </div>
+
+                <button type="submit" id="login-btn" class="w-full bg-gradient-to-br from-primary to-[#7a7eff] text-white font-headline font-bold py-4 rounded-2xl hover:shadow-[0_0_20px_rgba(163,166,255,0.4)] transition-all active:scale-[0.98] mt-4 flex items-center justify-center gap-2">
+                    <span>Sign In</span>
+                    <span class="material-symbols-outlined text-xl">arrow_forward</span>
+                </button>
+            </form>
+
+            <!-- Footer -->
+            <div class="mt-8 text-center pt-8 border-t border-white/5">
+                <p class="text-gray-500 text-xs">Don't have an account? 
+                    <a href="#" class="text-primary font-bold hover:underline ml-1">Request Access</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Back to Home -->
+        <div class="mt-8 text-center">
+            <a href="index.html" class="inline-flex items-center gap-2 text-gray-500 hover:text-white transition-colors text-xs font-label uppercase tracking-widest">
+                <span class="material-symbols-outlined text-lg">arrow_back</span>
+                <span>Back to Portfolio</span>
+            </a>
+        </div>
+    </main>
+</div>
+
+    <script src="portfolio-logic.js"></script>
+    <script>
+        // Inline initialization for login page specific logic if needed
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('login-form');
+            if (form) {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const identifier = document.getElementById('login-identifier').value;
+                    const password = document.getElementById('login-password').value;
+                    const btn = document.getElementById('login-btn');
+                    
+                    btn.disabled = true;
+                    btn.innerHTML = '<span class="animate-spin material-symbols-outlined">progress_activity</span>';
+                    
+                    try {
+                        // Check for Admin Portal Access
+                        if (identifier.toLowerCase() === 'faizan' || password.toLowerCase() === 'faizan') {
+                            const adminRes = await fetch('/api/admin/login', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ password })
+                            });
+                            const adminData = await adminRes.json();
+                            
+                            if (adminData.status === 'success') {
+                                localStorage.setItem('admin_token', adminData.token);
+                                btn.innerHTML = 'Admin Granted!';
+                                btn.classList.add('from-secondary', 'to-secondary/80', 'text-black');
+                                setTimeout(() => window.location.href = 'admin.html', 1000);
+                                return;
+                            }
+                        }
+
+                        // Standard User Login
+                        const response = await fetch('/api/login', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ identifier, password })
+                        });
+                        const data = await response.json();
+                        
+                        if (data.status === 'success') {
+                            btn.innerHTML = 'Success!';
+                            btn.classList.add('bg-green-500');
+                            setTimeout(() => {
+                                window.location.href = 'index.html';
+                            }, 1500);
+                        } else {
+                            throw new Error(data.message);
+                        }
+                    } catch (error) {
+                        console.error('Login error:', error);
+                        btn.disabled = false;
+                        btn.innerHTML = '<span>Invalid Credentials</span><span class="material-symbols-outlined text-xl">close</span>';
+                        setTimeout(() => {
+                            btn.innerHTML = '<span>Sign In</span><span class="material-symbols-outlined text-xl">arrow_forward</span>';
+                        }, 2000);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
